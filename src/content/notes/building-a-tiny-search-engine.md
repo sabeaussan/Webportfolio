@@ -320,8 +320,11 @@ And that is the part I find interesting.
 
 Traditional CAPTCHAs rely on machines being less capable than humans. That advantage is disappearing quickly. The approach explored here relies on something slightly different: machines and humans may become equally capable, or machines may become vastly more capable, while still processing information in fundamentally different ways.
 
+![A CAPTCHA](meme2.jpeg)
+
 Maybe the future of proving that you are human is therefore not demonstrating how intelligent you are.
 
 Maybe it is demonstrating all the wonderfully weird ways in which you are not.
 
-![A CAPTCHA](meme2.jpeg)
+### **Are you a real human reading this ? [Prove it!](https://sightprint.onrender.com/).**
+
