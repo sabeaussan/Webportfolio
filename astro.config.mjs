@@ -7,7 +7,7 @@ const repository = process.env.GITHUB_REPOSITORY?.split('/')[1];
 const isUserSite = repository?.endsWith('.github.io');
 
 export default defineConfig({
-  site: process.env.SITE_URL ?? 'https://your-name.github.io',
+  site: process.env.SITE_URL ?? 'https://sabeaussan.github.io',
   base: repository && !isUserSite ? `/${repository}` : '/',
   output: 'static',
   markdown: {
