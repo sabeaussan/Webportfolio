@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+export async function getStaticPaths() {
+  const projects = await getCollection('projects', ({ data }) => !data.draft);
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+interface Props { project: CollectionEntry<'projects'>; }
+const { project } = Astro.props;
+const { Content } = await render(project);
+const projectsUrl = `${import.meta.env.BASE_URL}projects/`;
+---
+<BaseLayout title={project.data.title} description={project.data.summary}>
+  <article class={`project-detail accent-${project.data.accent}`}>
+    <header class="article-hero project-detail-hero">
+      <a class="back-link" href={projectsUrl}>← All expeditions</a>
+      <p class="kicker"><span>Expedition {project.data.number}</span><span>{project.data.status}</span></p>
+      <h1>{project.data.title}</h1><p>{project.data.summary}</p>
+      {project.data.cover ? <Image class="article-cover" src={project.data.cover} alt={project.data.coverAlt ?? ''} widths={[640, 960, 1280]} sizes="(max-width: 850px) 90vw, 70vw" /> : <div class="mission-planet" aria-hidden="true"><i></i><span></span></div>}
+    </header>
+    <div class="mission-grid section-rule">
+      <aside><p class="eyebrow">Mission data</p><dl><dt>Status</dt><dd>{project.data.status}</dd><dt>Year</dt><dd>{project.data.year}</dd><dt>Technology</dt><dd>{project.data.stack.join(' · ')}</dd></dl></aside>
+      <div class="prose"><Content />{project.data.repository && <a class="button" href={project.data.repository} target="_blank" rel="noreferrer">View source <span>↗</span></a>}</div>
+    </div>
+  </article>
+</BaseLayout>

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+import { sortProjects } from '../../lib/content';
+const projects = sortProjects(await getCollection('projects', ({ data }) => !data.draft));
+---
+<BaseLayout title="Projects" description="Selected software projects and experiments.">
+  <section class="page-hero compact-hero projects-hero">
+    <div><p class="kicker"><span>Mission control</span><span>{String(projects.length).padStart(2, '0')} expeditions</span></p><h1>Things launched<br/><em>into the world.</em></h1></div>
+  </section>
+  <section class="project-archive section-rule">
+    <div class="project-grid large">{projects.map((project) => <ProjectCard project={project} />)}</div>
+  </section>
+</BaseLayout>

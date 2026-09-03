@@ -1,0 +1,30 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import 'katex/dist/katex.min.css';
+import { site } from '../data/site';
+interface Props { title?: string; description?: string; }
+const { title, description = site.description } = Astro.props;
+const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role}`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#162b32" />
+    <link rel="icon" href={`data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22%23f16635%22/><path d=%22M15 54h70%22 stroke=%22%23f7ddbd%22 stroke-width=%228%22/></svg>`} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <div class="page-shell">
+      <Header />
+      <main id="content"><slot /></main>
+      <Footer />
+    </div>
+  </body>
+</html>

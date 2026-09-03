@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+import { Image } from 'astro:assets';
+import profileImage from '../assets/me.jpg';
+---
+<BaseLayout title="About" description={`About ${site.name}, ${site.role}.`}>
+  <section class="page-hero about-hero">
+    <div>
+      <p class="kicker"><span>Crew manifest</span><span>File 001</span></p>
+      <h1>Builder, observer,<br/><em>perpetual beginner.</em></h1>
+    </div>
+    <Image
+      class="profile-image"
+      src={profileImage}
+      alt={`Portrait of ${site.name}`}
+      widths={[320, 540]}
+      sizes="(max-width: 850px) 320px, 540px"
+    />
+  </section>
+  <section class="article-grid section-rule">
+    <aside><p class="eyebrow">Current coordinates</p><p>{site.location}</p><p>{site.role}</p></aside>
+    <article class="prose lead-prose">
+      <p>I’m Samuel, a Senior AI Engineer with a Ph.D. in machine learning and robotics.</p>
+      <p>I build intelligent systems that move from research ideas to practical applications, with experience in computer vision, reinforcement learning, optimization, and MLOps.</p>
+      <h2>What I’m exploring</h2>
+      <p>I’m especially interested in efficient machine learning, vision foundation models, robotics, and understanding deep-learning systems from first principles.</p>
+      <h2>Sharing knowledge</h2>
+      <p>Alongside my engineering work, I create projects and teach courses in machine learning, computer vision, and reinforcement learning.</p>
+      <a class="button" href={`mailto:${site.email}`}>Start a conversation <span>↗</span></a>
+    </article>
+  </section>
+</BaseLayout>

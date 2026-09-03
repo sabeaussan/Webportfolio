@@ -1,0 +1,26 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+interface Props { project: CollectionEntry<'projects'>; }
+const { project } = Astro.props;
+const { data } = project;
+const url = `${import.meta.env.BASE_URL}projects/${project.id}/`;
+---
+<a class={`project-card accent-${data.accent}`} href={url}>
+  <div class="project-topline"><span>EXPEDITION {data.number}</span><span>{data.year}</span></div>
+  {data.cover ? (
+    <Image class="project-card-image" src={data.cover} alt={data.coverAlt ?? ''} widths={[360, 640]} sizes="(max-width: 850px) 90vw, 30vw" />
+  ) : (
+    <div class="project-console" aria-hidden="true">
+      <span class="console-screen"><i></i></span>
+      <span class="console-dial"></span><span class="console-dial"></span><span class="console-dial"></span>
+      <b></b><b></b><b></b><b></b>
+    </div>
+  )}
+  <div>
+    <p class="eyebrow">{data.status}</p>
+    <h3>{data.title}</h3>
+    <p>{data.summary}</p>
+  </div>
+  <span class="card-arrow" aria-hidden="true">↗</span>
+</a>

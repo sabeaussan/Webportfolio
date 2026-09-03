@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { formatDate, sortNotes } from '../../lib/content';
+const notes = sortNotes(await getCollection('notes', ({ data }) => !data.draft));
+const url = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+---
+<BaseLayout title="Notes" description="Notes on software, systems, and the edges between them.">
+  <section class="page-hero compact-hero">
+    <div><p class="kicker"><span>Archive</span><span>{String(notes.length).padStart(2, '0')} signals</span></p><h1>Where <br/><em>curiosity</em> leads.</h1></div>
+  </section>
+  <section class="archive section-rule">
+    <div class="archive-header"><span>Date</span><span>Transmission</span><span>Frequency</span></div>
+    {notes.map((note, index) => (
+      <a class="archive-row" href={url(`/notes/${note.id}/`)}>
+        <time datetime={note.data.date.toISOString()}>{formatDate(note.data.date)}</time>
+        <div><span class="archive-number">{String(index + 1).padStart(2, '0')}</span><h2>{note.data.title}</h2><p>{note.data.description}</p></div>
+        <span>{note.data.category}<i>{note.data.readTime}</i></span><b aria-hidden="true">→</b>
+      </a>
+    ))}
+  </section>
+</BaseLayout>

@@ -1,0 +1,11 @@
+---
+import { site } from '../data/site';
+---
+<footer class="site-footer">
+  <p><span class="status-light" aria-hidden="true"></span>Open to interesting signals</p>
+  <div class="footer-links">
+    <a href={`mailto:${site.email}`}>Email</a>
+    {site.social.map((item) => <a href={item.href} target="_blank" rel="noreferrer">{item.label}</a>)}
+  </div>
+  <p class="copyright">© {new Date().getFullYear()} {site.name}</p>
+</footer>

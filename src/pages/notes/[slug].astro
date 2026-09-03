@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { site } from '../../data/site';
+import { formatDate } from '../../lib/content';
+export async function getStaticPaths() {
+  const notes = await getCollection('notes', ({ data }) => !data.draft);
+  return notes.map((note) => ({ params: { slug: note.id }, props: { note } }));
+}
+interface Props { note: CollectionEntry<'notes'>; }
+const { note } = Astro.props;
+const { Content } = await render(note);
+const notesUrl = `${import.meta.env.BASE_URL}notes/`;
+---
+<BaseLayout title={note.data.title} description={note.data.description}>
+  <article class="note-article">
+    <header class="article-hero">
+      <a class="back-link" href={notesUrl}>← All transmissions</a>
+      <div class="article-meta"><span>{note.data.category}</span><time datetime={note.data.date.toISOString()}>{formatDate(note.data.date)}</time><span>{note.data.readTime} read</span></div>
+      <h1>{note.data.title}</h1>{note.data.intro && <p>{note.data.intro}</p>}
+      {note.data.cover && <Image class="article-cover" src={note.data.cover} alt={note.data.coverAlt ?? ''} widths={[640, 960, 1280]} sizes="(max-width: 850px) 90vw, 70vw" />}
+    </header>
+    <div class="article-body section-rule">
+      <aside><p class="eyebrow">Transmission log</p><span>Author<br/>{site.name}</span><span>Signal<br/>Stable</span></aside>
+      <div class="prose">
+        <Content />
+        <div class="end-mark" aria-label="End of transmission">✦</div>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
