@@ -110,6 +110,12 @@ h1 em { color: var(--orange); font-style: normal; }
 .prose { max-width: 720px; font-size: clamp(1rem, 1.4vw, 1.14rem); color: rgba(246,221,189,.82); }
 .lead-prose > p:first-child { color: var(--cream); font-size: clamp(1.4rem, 2.7vw, 2.1rem); line-height: 1.45; }
 .prose h2 { margin: 3.5rem 0 1rem; color: var(--cream); font-size: 1.5rem; text-transform: uppercase; }.prose .button { margin-top: 2rem; }.prose li { margin-bottom: .6rem; }
+.prose details { margin: 2rem 0; padding: 1rem 1.25rem; border: 2px solid var(--teal); background: rgba(68,127,142,.08); }
+.prose summary { color: var(--cream); font-family: var(--mono); font-weight: 500; cursor: pointer; transition: color .2s; }
+.prose summary:hover, .prose summary:focus-visible { color: var(--orange); }
+.prose summary:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+.prose details[open] summary { margin-bottom: 1rem; color: var(--orange); }
+.prose details > :last-child { margin-bottom: 0; }
 .archive { padding: clamp(3.5rem, 5vw, 5.5rem) clamp(1.25rem, 7vw, 7rem); display: grid; gap: .75rem; background: var(--ink-soft); }
 .archive-header { padding: .75rem 1.4rem; display: grid; grid-template-columns: 130px 1fr 170px; gap: 1rem; border-bottom: 3px solid var(--cream); color: var(--cream); font-family: var(--mono); font-size: .72rem; letter-spacing: .15em; text-transform: uppercase; }
 .archive-row { min-height: 175px; padding: 1.75rem 1.4rem; position: relative; display: grid; grid-template-columns: 130px 1fr 170px 30px; gap: 1rem; align-items: start; border: 2px solid rgba(238,236,210,.25); background: rgba(238,236,210,.035); text-decoration: none; transition: transform .2s, border-color .2s, background .2s; }

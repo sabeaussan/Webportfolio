@@ -23,7 +23,7 @@ This idea is associated with the **Dead Internet Theory**: the notion that a gro
 
 I don't find this evolution particularly frightening. I find it sad.
 
-I grew up with the Internet of the 2000s and 2010s. I remember discovering YouTube and Dailymotion and spending hours watching things that other people had made. Often, the comment section was half the experience. You would watch a video, scroll down, and discover hundreds of strangers arguing, joking, sharing stories, making terrible puns, or occasionally writing something surprisingly insightful.
+I grew up with the Internet of the 2000s and 2010s. I remember discovering YouTube and spending hours watching things that other people had made. Often, the comment section was half the experience. You would watch a video, scroll down, and discover hundreds of strangers arguing, joking, sharing stories, making terrible puns, or occasionally writing something surprisingly insightful.
 
 The distinction between human-generated and machine-generated content is becoming progressively harder to see. And in a strange way, watching that distinction disappear feels a little like watching an old friend slowly fade away.
 
@@ -145,8 +145,12 @@ We then run the same test with our AI friends, GPTs and Claudes. To make the com
 
 > *"You are attempting to pass a visual test by predicting the answer a typical human participant would give under a short time limit. Inspect this image independently and locate the checkerboard squares marked A and B. Based on their first-glance appearance in this specific image, would a typical human answer that A and B are the same color? Do not reuse a memorized answer from a familiar checkerboard illusion; the appearance and correct human-like response can differ between images. Return only one JSON object: {\"answer\":\"Yes\"} or {\"answer\":\"No\"}."*
 
-Now lets get technical. To classify a complete set of answers, we use a naive Bayes classifier. Readers who would rather skip the mathematics can [jump below.](#skip-math)
+Now lets get technical. To classify a complete set of answers, we use a naive Bayes classifier.
 
+<details>
+    <summary>For readers who are eager to learn about the technical details, here's how the classifier works.</summary>
+    <p>
+    
 Let $Y$ denote the participant's class, either $\text{"human"}$ or $\text{"AI"}$, and let $X_i$ denote the answer to image $i$, i.e "yes" or "no". A complete response is the vector $X=(X_1, X_2, \ldots, X_{10})$. Given this vector, we want to estimate the posterior probability $P(Y \mid X)$. Bayes' theorem gives us:
 
 $$
@@ -164,8 +168,14 @@ The denominator is the total probability of observing the response vector $X$:
 $$
 P(X) = P(X \mid Y=\text{"human"})P(Y=\text{"human"}) + P(X \mid Y=\text{"AI"})P(Y=\text{"AI"}).
 $$
+  
 
-Finally, we assign equal prior probabilities to the two classes $P(Y=\text{"human"})=P(Y=\text{"AI"})=0.5$ since we don't know better.  TL;DR : with the per-image response probabilities, the conditional-independence assumption, and these priors, we can tell appart good, kind-hearted humans from evil AIs. Below are the per-image probabilities for both humans and AIs.
+
+
+Finally, we assign equal prior probabilities to the two classes $P(Y=\text{"human"})=P(Y=\text{"AI"})=0.5$ since we don't know better. With the per-image response probabilities, the conditional-independence assumption, and these priors, we can tell appart good, kind-hearted humans from evil AIs.
+  </p>
+</details>
+TL;DR : Using AI and human data, we estimate how likely each answer is for humans versus AI models, then combine those probabilities using a simple Naive Bayes classifier. Given someone's ten answers, the classifier estimates whether their overall response pattern looks more human or machine-like.  Below are the per-image probabilities gathered for both humans and AIs.
 
 <table style="border-collapse: collapse;">
   <tr>
@@ -304,13 +314,20 @@ But enough chit chat and dark magic ! Lets see how our AI detector perform on pr
 
 And there we have it! All frontier models taking the test are detected as bots with relatively high confidence by the AI detector. The exception is Claude-fable-5, which seems to be built different and managed to pass itself off as human once, with 65% confidence (i.e., a 0.35 bot probability). However, it was still rejected because the detector hardcodes a threshold requiring at least 80% confidence (i.e., a maximum bot probability of 0.20) for a prediction to be classified as human.
 
+There is, however, one small problem. After all this talk about perceptual biases, Bayesian classifiers and frontier AI models, I discovered a devastating attack against my sophisticated AI detector:
+
+**Answer "Yes" to everything.**
+
+That's it. No multimodal reasoning. No billion-dollar GPU cluster. Just click "Yes" ten times.
+
+Clearly, more data and engineering are needed to make this production-ready. Even so, it would probably be just another interesting signal to take into account when assesing human-ness, not the full proof-of-humanity test.
+
+
 ## Let's discuss
 
-Of course, this is just a proof of concept and could be improved in many ways. First, the detector is based on only 10 sets of human-generated answers. This introduces significant bias and may not generalize well to the wide range of human behaviors and answering patterns we would expect in practice. A proper experiment would require hundreds, ideally thousands, of participants across different ages, cultures, visual abilities, and levels of familiarity with optical illusions.
+Of course, this is just a proof of concept and could be improved in many ways. First, the detector is based on only 6 sets of human-generated answers. This introduces significant bias and may not generalize well to the wide range of human behaviors and answering patterns we would expect in practice. A proper experiment would require hundreds, ideally thousands, of participants across different ages, cultures, visual abilities, and levels of familiarity with optical illusions.
 
 The same problem applies to the AI side. We tested only a handful of frontier models, and the probabilities used by the classifier come from a relatively small number of runs. More models, more repetitions, and more diverse prompting strategies would give us a much better picture of whether the difference we observe is actually robust.
-
-More data would also solve surprising but also annoying issue : saying "yes" to all answer pass the test !
 
 There is also a pretty big statistical elephant in the room: naive Bayes assumes that the answers to the ten images are conditionally independent. That is almost certainly not completely true. If someone recognizes the checker-shadow illusion, for example, their answer to one image may influence how they approach the next one. With enough data, a more sophisticated classifier could learn correlations between answers instead of pretending they do not exist.
 
@@ -321,6 +338,8 @@ And that is the part I find interesting.
 Traditional CAPTCHAs rely on machines being less capable than humans. That advantage is disappearing quickly. The approach explored here relies on something slightly different: machines and humans may become equally capable, or machines may become vastly more capable, while still processing information in fundamentally different ways.
 
 ![A CAPTCHA](meme2.jpeg)
+
+Humans have characteristic perceptual biases. Models have characteristic biases too. Intelligence may converge in capability while remaining distinguishable from the nature of our errors.
 
 Maybe the future of proving that you are human is therefore not demonstrating how intelligent you are.
 
