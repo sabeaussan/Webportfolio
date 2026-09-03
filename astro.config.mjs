@@ -8,7 +8,7 @@ const isUserSite = repository?.endsWith('.github.io');
 
 export default defineConfig({
   site: process.env.SITE_URL ?? 'https://sabeaussan.github.io',
-  base: repository && !isUserSite ? `/${repository}` : '/',
+  base: repository && !isUserSite ? `/${repository}/` : '/',
   output: 'static',
   markdown: {
     processor: unified({
